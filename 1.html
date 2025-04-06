@@ -1,0 +1,276 @@
+
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>给特别的你</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            color: #fff;
+            text-align: center;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            transform: scale(0.9);
+            opacity: 0;
+            animation: fadeIn 1.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        p {
+            font-size: 1.5em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .heart {
+            position: absolute;
+            pointer-events: none;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            text-decoration: none;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            background-color: #ff4757;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        .btn-no {
+            background-color: #70a1ff;
+        }
+
+        .btn-no:hover {
+            background-color: #5352ed;
+        }
+
+        .hidden-message {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            animation: fadeIn 1s;
+        }
+
+        .photo-frame {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 20px auto;
+            overflow: hidden;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .photo-frame:hover img {
+            transform: scale(1.1);
+        }
+
+        .special-message {
+            display: none;
+            font-size: 2em;
+            color: #ff4757;
+            margin-top: 20px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .emoji {
+            font-size: 1.5em;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="photo-frame">
+            <img src="微信图片_20250405223807.jpg" width="500" height="500" alt=""/>
+            <img src="https://source.unsplash.com/random/400x400/?love" alt="Special Someone">
+        </div>
+        <h1>亲爱的<span id="name">你</span></h1>
+        <p>跟你在一起的每一天都很开心</p>
+        <p>每一天因为有你而变得不同</p>
+		<p>千万不要抛弃我好不好</p>
+        
+        <div id="buttons">
+            <button class="btn" id="yesBtn">我也喜欢你</button>
+            <button class="btn btn-no" id="noBtn">再考虑一下</button>
+        </div>
+        
+        <div id="hiddenMessage" class="hidden-message">
+            <h2>❤️ 谢谢你 ❤️</h2>
+            <p>我知道你会选择"是"的！</p>
+            <p>让我们一起去创造更多美好的回忆吧~</p>
+            <p id="signature">爱你的我</p>
+        </div>
+
+        <div id="specialMessage" class="special-message">
+           我知道啦，我的宝贝，我还是很喜欢你，但是我尊重你的选择，感谢你愿意点进去看<span class="emoji">😊</span>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <!-- 替换为你喜欢的音乐链接 -->
+    </audio>
+
+    <script>
+        // 创建漂浮的心形
+        function createHearts() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = Math.random() * 100 + 'vh';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        // 每隔一段时间创建心形
+        setInterval(createHearts, 300);
+
+        // 询问名字
+        const name = prompt('请输入你的名字', '亲爱的');
+        if (name) {
+            document.getElementById('name').textContent = name;
+        }
+
+        // 按钮交互
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const hiddenMessage = document.getElementById('hiddenMessage');
+        const specialMessage = document.getElementById('specialMessage');
+        const buttons = document.getElementById('buttons');
+        const bgMusic = document.getElementById('bgMusic');
+
+        let noCount = 0;
+
+        yesBtn.addEventListener('click', () => {
+            buttons.style.display = 'none';
+            hiddenMessage.style.display = 'block';
+            bgMusic.play();
+            
+            // 创建更多心形作为庆祝
+            for (let i = 0; i < 50; i++) {
+                setTimeout(createHearts, i * 100);
+            }
+        });
+
+        noBtn.addEventListener('click', () => {
+            noCount++;
+            
+            if (noCount < 3) {
+                const confirmMessage = noCount === 1 
+                    ? "真的要抛弃我吗？" 
+                    : "真的吗？"
+                
+                if (confirm(confirmMessage)) {
+                    // 如果用户确认选择"不是"
+                    noBtn.textContent = noCount === 1 ? "我真的很犹豫" : "我还是不确定";
+                    noBtn.style.fontSize = (1 + noCount * 0.1) + 'em';
+                    
+                    // 让"不"按钮逃跑
+                    noBtn.style.position = 'absolute';
+                    noBtn.style.left = Math.random() * 70 + '%';
+                    noBtn.style.top = Math.random() * 70 + '%';
+                } else {
+                    // 如果用户取消选择"不是"，减少计数
+                    noCount--;
+                }
+            } else {
+                // 第三次选择"不是"后
+                buttons.style.display = 'none';
+                specialMessage.style.display = 'block';
+                bgMusic.play();
+                
+                // 创建更多心形作为庆祝
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(createHearts, i * 100);
+                }
+            }
+        });
+
+        // 点击页面任意位置播放音乐
+        document.body.addEventListener('click', () => {
+            bgMusic.play().catch(e => {
+                console.log('自动播放被阻止，请手动点击播放');
+            });
+        });
+    </script>
+</body>
+</html>
